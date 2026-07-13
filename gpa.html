@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OIMLY CGPA Calculator & Predictor</title>
+  <style>
+    :root {
+      --navy: #1a2a4c;
+      --orange: #ff7f11;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --gray: #6c757d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--light-bg);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: var(--white);
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .btn-outline {
+      padding: 10px 20px;
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-outline:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, var(--navy), #2e4a7a);
+      color: var(--white);
+    }
+
+    .hero h2 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    /* CARDS SECTION */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      padding: 50px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      color: var(--navy);
+      margin-bottom: 20px;
+      border-bottom: 3px solid var(--orange);
+      padding-bottom: 10px;
+    }
+
+    /* INPUTS & BUTTONS */
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--orange);
+      outline: none;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #e86a00;
+      transform: translateY(-2px);
+    }
+
+    /* COURSE LIST */
+    .course-item {
+      background: var(--light-bg);
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid var(--orange);
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .delete-btn:hover {
+      background: #b02a37;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 30px;
+      background: var(--navy);
+      color: var(--white);
+      margin-top: 50px;
+    }
+
+    @media(max-width: 768px) {
+      .navbar { padding: 15px 20px; }
+      .features { padding: 30px 20px; }
+      .hero h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <h1 class="logo"><a href="index.html" style="text-decoration:none; color:var(--navy)">OIMLY</a></h1>
+    <div class="nav-buttons">
+      <a href="index.html" class="btn-outline">Back to OIMLY</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h2>OIMLY CGPA Calculator & Predictor</h2>
+    <p>Calculate your current CGPA and see what grades you need to hit your target</p>
+  </section>
+
+  <section class="features">
+    <!-- CALCULATOR CARD -->
+    <div class="card">
+      <h3>1. Add Your Courses</h3>
+      <input type="text" id="course" placeholder="Course Code e.g MTH101">
+      <input type="number" id="unit" placeholder="Course Units e.g 3">
+      <select id="grade">
+        <option value="">Select Grade</option>
+        <option value="5">A - 5 Points</option>
+        <option value="4">B - 4 Points</option>
+        <option value="3">C - 3 Points</option>
+        <option value="2">D - 2 Points</option>
+        <option value="1">E - 1 Point</option>
+        <option value="0">F - 0 Points</option>
+      </select>
+      <button onclick="addCourse()" class="btn-primary">Add Course</button>
+      <div id="course-list" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- RESULT CARD -->
+    <div class="card">
+      <h3>2. Your Result</h3>
+      <h1 style="color: var(--orange); font-size: 48px; text-align:center;">CGPA: <span id="cgpa">0.00</span></h1>
+      <p>Total Units: <span id="totalUnits">0</span></p>
+      <p>Total Grade Points: <span id="totalPoints">0</span></p>
+      <button onclick="clearAll()" class="btn-outline" style="margin-top:10px; width:100%;">Clear All</button>
+    </div>
+
+    <!-- PREDICTOR CARD -->
+    <div class="card">
+      <h3>3. CGPA Predictor</h3>
+      <p>What CGPA do you want to graduate with?</p>
+      <input type="number" id="targetCGPA" placeholder="Target CGPA e.g 4.5" step="0.01" max="5">
+      <input type="number" id="futureUnits" placeholder="Total Units Left e.g 40">
+      <button onclick="predictCGPA()" class="btn-primary">Predict</button>
+      <p id="predictionResult" style="margin-top:15px; font-weight: bold;"></p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 OIMLY CGPA. Built for Nigerian Students.</p>
+  </footer>
+
+<script>
+let courses = JSON.parse(localStorage.getItem('oimly_courses')) || [];
+
+function saveData() {
+  localStorage.setItem('oimly_courses', JSON.stringify(courses));
+}
+
+function addCourse() {
+  let course = document.getElementById('course').value;
+  let unit = parseFloat(document.getElementById('unit').value);
+  let grade = parseFloat(document.getElementById('grade').value);
+  
+  if(!course || !unit || grade === "") {
+    alert("Please fill all fields");
+    return;
+  }
+  
+  courses.push({course, unit, grade});
+  saveData();
+  displayCourses();
+  calculateCGPA();
+  
+  document.getElementById('course').value = "";
+  document.getElementById('unit').value = "";
+  document.getElementById('grade').value = "";
+}
+
+function displayCourses() {
+  let list = document.getElementById('course-list');
+  list.innerHTML = "<h4>Added Courses:</h4>";
+  courses.forEach((c, index) => {
+    let gradeLetter = ['F','E','D','C','B','A'][c.grade];
+    list.innerHTML += `
+      <div class="course-item">
+        <span>${c.course} - ${c.unit} Units - Grade: ${gradeLetter}</span>
+        <button class="delete-btn" onclick="deleteCourse(${index})">X</button>
+      </div>
+    `;
+  });
+}
+
+function deleteCourse(index) {
+  courses.splice(index, 1);
+  saveData();
+  displayCourses();
+  calculateCGPA();
+}
+
+function calculateCGPA() {
+  let totalPoints = 0;
+  let totalUnits = 0;
+  
+  courses.forEach(c => {
+    totalPoints += c.grade * c.unit;
+    totalUnits += c.unit;
+  });
+  
+  let cgpa = totalUnits > 0 ? (totalPoints / totalUnits).toFixed(2) : 0;
+  document.getElementById('cgpa').innerText = cgpa;
+  document.getElementById('totalUnits').innerText = totalUnits;
+  document.getElementById('totalPoints').innerText = totalPoints;
+}
+
+function predictCGPA() {
+  let target = parseFloat(document.getElementById('targetCGPA').value);
+  let futureUnits = parseFloat(document.getElementById('futureUnits').value);
+  
+  if(!target || !futureUnits) {
+    alert("Enter target CGPA and units left");
+    return;
+  }
+  
+  let currentPoints = 0;
+  let currentUnits = 0;
+  courses.forEach(c => {
+    currentPoints += c.grade * c.unit;
+    currentUnits += c.unit;
+  });
+  
+  let totalUnits = currentUnits + futureUnits;
+  let requiredTotalPoints = target * totalUnits;
+  let neededPoints = requiredTotalPoints - currentPoints;
+  let neededAvg = neededPoints / futureUnits;
+  
+  let result = document.getElementById('predictionResult');
+  if(neededAvg > 5) {
+    result.innerHTML = `Impossible 😢 You need average of ${neededAvg.toFixed(2)} which is above 5.0`;
+  } else if(neededAvg < 0) {
+    result.innerHTML = `You already made it! 🎉`;
+  } else {
+    result.innerHTML = `To get ${target} CGPA, you need an average of <b>${neededAvg.toFixed(2)}</b> in your remaining ${futureUnits} units.<br>That’s mostly ${neededAvg >= 4.5 ? 'A\'s' : neededAvg >= 3.5 ? 'A\'s and B\'s' : 'B\'s and C\'s'}`;
+  }
+}
+
+function clearAll() {
+  if(confirm("Delete all courses?")) {
+    courses = [];
+    saveData();
+    displayCourses();
+    calculateCGPA();
+  }
+}
+
+displayCourses();
+calculateCGPA();
+</script>
+
+</body>
+</html>
